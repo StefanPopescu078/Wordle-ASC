@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
-#pragma GCC target ("avx2")
-#pragma GCC optimization ("O3")
-#pragma GCC optimization ("unroll-loops")
+
 using namespace std;
 
 struct Word{
@@ -9,7 +7,7 @@ struct Word{
 };
 
 class DataBase : public vector<Word>{
-    
+
 public:
     DataBase(){
         ifstream in("cuvinte_wordle.txt");
@@ -23,7 +21,7 @@ unsigned char put3[] = {1, 3, 9, 27, 81, 243};
 unsigned char GYW[128];
 
 unsigned char toInt(char * r){
-    return GYW[r[0]] * put3[4] + GYW[r[1]] * put3[3] + GYW[r[2]] * put3[2] + GYW[r[3]] * put3[1] + GYW[r[4]] * put3[0]; 
+    return GYW[r[0]] * put3[4] + GYW[r[1]] * put3[3] + GYW[r[2]] * put3[2] + GYW[r[3]] * put3[1] + GYW[r[4]] * put3[0];
 }
 
 namespace Simulare{
@@ -34,7 +32,7 @@ namespace Simulare{
     */
     char rez[6];
     unsigned char sim(const char * sr, const char * ans){
-        
+
         rez[5] = '\0';
         unsigned char ns = 0;
         for(int i = 0; i < 5; i++){
@@ -75,9 +73,24 @@ public:
 Univers univStart[256];
 
 int mpp[256];
+double lgUnvSize;
+
+double calcEntropie(DataBase & db, Univers & unv, int calcIndex)
+{
+	double ent = 0;
+
+	fill(mpp, mpp + 243, 0);
+	for(auto & u : unv) /// pentru fiecare cuvand ce apartine universului (adica multimii de potentiale solutii la joc) simulam raspunsul pe care l-ar da jocul pentru cuvantul candidat actual
+		mpp[Simulare::sim(db[u].l, db[calcIndex].l)]++;
+
+	for(int x = 0; x < 243; x++) /// calculam entropia (folosind valorile precalculate si formula rescrisa pentru a reduce numarul de operatii)
+		if(mpp[x] != 0)
+			ent += (-log2(mpp[x]) + lgUnvSize) * mpp[x];
+
+	return ent /= unv.size();
+}
 
 void solve(DataBase & db){
-    Univers unv(db);
     cout << "TAREI\n";
     cout.flush();
     Word rez;
@@ -85,23 +98,15 @@ void solve(DataBase & db){
     if(strcmp(rez.l, "GGGGG") == 0)
         return;
 
-    unv = univStart[toInt(rez.l)];
+    Univers unv = univStart[toInt(rez.l)];
 
     while(true){
-        double entAns = 0;
         Word ans = db[unv[0]];
-        double lgUnvSize = log2(unv.size()); /// precalculam log2(dimensiunea_universului)
+        lgUnvSize = log2(unv.size()); /// precalculam log2(dimensiunea_universului)
+        double entAns = calcEntropie(db, unv, unv[0]);
         for(int i = 0; i < db.size(); i++){ /// fixam cuvintele candidate pe care sa le afisam jocului
-            double entAct = 0;
-            fill(mpp, mpp + 243, 0);
-            for(auto & u : unv) /// pentru fiecare cuvand ce apartine universului (adica multimii de potentiale solutii la joc) simulam raspunsul pe care l-ar da jocul pentru cuvantul candidat actual
-                mpp[Simulare::sim(db[u].l, db[i].l)]++;
-        
-            for(int x = 0; x < 243; x++) /// calculam entropia (folosind valorile precalculate si formula rescrisa pentru a reduce numarul de operatii)
-                if(mpp[x] != 0)
-                    entAct += (-log2(mpp[x]) + lgUnvSize) * mpp[x];
+            double entAct = calcEntropie(db, unv, i);
 
-            entAct /= unv.size();
             if(entAns < entAct) /// daca obtinem un cuvant cu entropie mai mare, il inlocuim pe cel cu care raspundem
                 ans = db[i], entAns = entAct;
         }
@@ -133,7 +138,7 @@ int main(){
             break;
         solve(db);
     }
-        
+
 
     return 0;
 }
