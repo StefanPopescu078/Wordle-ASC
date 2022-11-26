@@ -8,6 +8,7 @@
 int main(int argc, char *argv[]) {
     int pids[2], pipes[2][2], i;
     const int nrCuvinteWordle = 11454;
+    // const int nrCuvinteWordle = 100;
     if (argc != 3) {
         std::cout << "Usage: " << argv[0] << " <game> <player>\n";
         return -1;
