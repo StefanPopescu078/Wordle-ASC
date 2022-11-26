@@ -10,6 +10,7 @@ Fiecare proces de tip "game" pornit de conector va genera (ca rezultat al pasăr
 
 Jocul implementează un comportament de tip "buggy" (în care literele ce se potrivesc sunt marcate cu verde, iar cele prezente în cuvânt -marcate deja sau nu- sunt colorate cu galben).
 Jocul afișează la începutul unei sesiuni de joc cuvântul "Go", iar la final cuvântul "Stop" (în scopul comunicării cu programul "player"; la fiecare "Go" al jocului, player-ul incepe o sesiune nouă de joc).
+Cuvintele se citesc din fișierul "cuvinte_wordle.txt".
 
 ## Playerul (fișierul "player.cpp")
 
