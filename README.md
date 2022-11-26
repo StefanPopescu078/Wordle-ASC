@@ -57,3 +57,8 @@ Pentru a rula simularea folosiți comenzile:
 ### Note
 
 O configurație este reprezentată de un șir de 5 caractere din mulțimea $\\{'G', 'Y', 'W'\\}$. De exemplu: $'WYYGG'$ reprezintă o configurație ce spune că ultimele 2 caractere sunt pe poziția corectă și sunt caractere corecte, al doilea și al treilea sunt caractere corecte, dar nu pe poziții corecte, iar primul este greșit. Această configurație poate fi primită în cazul când soluția finală este $'CARTE'$ iar răspunsul dat este $'FRATE'$. (convenția culorilor este 'G' = verde, 'Y' = galben, 'W' = gri)
+
+### Realizatori
+
+1. Ilie Dumitru
+2. Popescu Ștefan - Alexandru
