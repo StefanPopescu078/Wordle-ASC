@@ -1,4 +1,3 @@
-// #include <bits/stdc++.h>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -63,7 +62,7 @@ int main(int argc, char * argv[]){
     for(int i = ll; i < rr; i++){
         // cerr << i << "\n";
         string sr = db[i];
-        logFile << sr << ": ";
+        logFile << sr << ", ";
         cout << "Go\n";
         cout.flush();
         int nnn = 0;
@@ -79,14 +78,17 @@ int main(int argc, char * argv[]){
             nr++;
             cout.flush();
             if(rez == "GGGGG"){
-                logFile << ": " << nnn << "\n";
+                logFile << "\n";
+                //logFile << " : " << nnn << "\n";
+                // ^^^ afiseaza numarul de incercari per sesiune ^^^
+
                 break;
             }
         }
     }
     cout << "Stop\n";
     cout.flush();
-    if(argc != 1){
+    if(argc != 1){ /// afiseaza numarul de incercari din instanta
         logFile << nr << "\n";
     }
     return 0;
