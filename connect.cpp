@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
                 }
                 
             } else { /// deci procesul e parinte
-                std::cout << "Program " << argv[i + 1] << "started with id " << pids[i] << "\n";
+                std::cout << "Program " << argv[i + 1] << " started with id " << pids[i] << "\n";
             }
         }
         /// inchidem pipe-urile (adica renuntam la FD-urile create artificial, programele de mai sus avand deja echivalate pipe-urile proprii)
