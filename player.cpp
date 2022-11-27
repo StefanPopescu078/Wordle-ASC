@@ -1,5 +1,11 @@
 #include <bits/stdc++.h>
 
+#pragma GCC target ("avx2")
+#pragma GCC optimization ("O3")
+#pragma GCC optimization ("unroll-loops")
+
+/// ^^^ elimina din verificarile ce tin de precizia matematica in favoarea performantei ^^^
+///    si vectorizeaza loop-urile
 using namespace std;
 
 struct Word{
@@ -61,10 +67,10 @@ public:
             push_back(i);
     }
     // universul de posibilitati se restrange in functie de compatibilitate
-    void shrink(const char * ans, const unsigned char rez, DataBase & db){
+    void shrink(const char * ans, const unsigned char rez, DataBase & db, int chAct){
         int v = 0;
         for(int i = 0; i < (int)size(); i++){
-            if(Simulare::sim(db[(*this)[i]].l, ans) == rez)
+            if(Simulare::sim(db[(*this)[i]].l, ans) == rez && (*this)[i] != chAct)
                 (*this)[v++] = (*this)[i];
         }
         resize(v);
@@ -73,11 +79,11 @@ public:
 Univers univStart[256];
 
 int mpp[256];
-double lgUnvSize;
+long double lgUnvSize;
 
-double calcEntropie(DataBase & db, Univers & unv, int calcIndex)
+long double calcEntropie(DataBase & db, Univers & unv, int calcIndex)
 {
-	double ent = 0;
+	long double ent = 0;
 
 	fill(mpp, mpp + 243, 0);
 	for(auto & u : unv) /// pentru fiecare cuvand ce apartine universului (adica multimii de potentiale solutii la joc) simulam raspunsul pe care l-ar da jocul pentru cuvantul candidat actual
@@ -102,13 +108,14 @@ void solve(DataBase & db){
 
     while(true){
         Word ans = db[unv[0]];
+        int ptAns = unv[0];
         lgUnvSize = log2(unv.size()); /// precalculam log2(dimensiunea_universului)
-        double entAns = calcEntropie(db, unv, unv[0]);
+        long double entAns = calcEntropie(db, unv, unv[0]);
         for(int i = 0; i < db.size(); i++){ /// fixam cuvintele candidate pe care sa le afisam jocului
-            double entAct = calcEntropie(db, unv, i);
+            long double entAct = calcEntropie(db, unv, i);
 
             if(entAns < entAct) /// daca obtinem un cuvant cu entropie mai mare, il inlocuim pe cel cu care raspundem
-                ans = db[i], entAns = entAct;
+                ans = db[i], entAns = entAct, ptAns = i;
         }
         cout << ans.l << "\n"; /// pasam jocului cuvantul candidat
         cout.flush();
@@ -116,7 +123,7 @@ void solve(DataBase & db){
         cin >> rez.l; /// citim raspunsul jocului
         if(strcmp(rez.l, "GGGGG") == 0)
             return;
-        unv.shrink(ans.l, toInt(rez.l), db); /// restrangem potentialele solutii (eliminam cuvintele ce nu returneaza configuratia "rez" pentru "ans" returnat de player)
+        unv.shrink(ans.l, toInt(rez.l), db, ptAns); /// restrangem potentialele solutii (eliminam cuvintele ce nu returneaza configuratia "rez" pentru "ans" returnat de player)
     }
 }
 
