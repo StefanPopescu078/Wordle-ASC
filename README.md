@@ -30,7 +30,7 @@ Playerul calculează la fiecare pas cel mai bun mod de a face o alegere pentru a
 
 ## Benchmark-uri
 
-Media încercărilor este 4.0074 .
+Media încercărilor este 4.0076 .
 Numărul maxim de încercări per cuvânt este 7 (pentru cuvantul "NUNII").
 Întreaga simulare durează aproximativ 4 min. (pe un Ryzen 7 4800H, cu setarea de 16 thread-uri dată programului "connect").
 
